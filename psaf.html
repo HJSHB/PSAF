@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSAF — Pakistan Students Association France</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --g0: #000d05;
+  --g1: #011a0a;
+  --g2: #012e12;
+  --g3: #01411c;
+  --g4: #016630;
+  --g5: #22c55e;
+  --gold: #d4a843;
+  --gold2: #f0cc7a;
+  --white: #f0ede6;
+  --muted: #4a7a5a;
+  --border: rgba(1,102,48,0.35);
+  --border-gold: rgba(212,168,67,0.3);
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-main: 'Syne', sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--g0);color:var(--white);font-family:var(--font-main);overflow-x:hidden;cursor:none;}
+#cursor{width:10px;height:10px;background:var(--gold);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+#cursor-ring{width:36px;height:36px;border:1px solid rgba(212,168,67,0.5);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.3s,height 0.3s,border-color 0.3s;}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:9990;}
+/* TOPBAR */
+#topbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:56px;background:rgba(0,13,5,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 2rem;}
+.tb-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none;margin-right:auto;}
+.tb-badge{width:30px;height:30px;background:var(--g3);border:1px solid var(--g4);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.62rem;font-weight:600;color:var(--gold);}
+.tb-name{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--white);}
+.tb-name span{color:var(--gold);}
+.tb-tabs{display:flex;list-style:none;height:100%;}
+.tb-tabs li{height:100%;}
+.tb-tabs a{display:flex;align-items:center;height:100%;padding:0 1rem;text-decoration:none;font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent;transition:color .2s,border-color .2s;}
+.tb-tabs a:hover,.tb-tabs a.active{color:var(--white);border-bottom-color:var(--gold);}
+.tab-n{font-family:var(--font-mono);font-size:.58rem;color:var(--muted);margin-right:.35rem;}
+.tb-tabs a.active .tab-n{color:var(--gold);}
+.tb-cta{margin-left:1.2rem;background:var(--gold) !important;color:var(--g0) !important;padding:.38rem .95rem !important;font-weight:700 !important;border-bottom:none !important;height:auto !important;align-self:center !important;}
+.tb-cta:hover{background:var(--gold2) !important;}
+/* PAGES */
+.page{display:none;padding-top:56px;min-height:100vh;}
+.page.active{display:block;}
+/* UTILS */
+.container{max-width:1200px;margin:0 auto;padding:0 2rem;}
+.chip{display:inline-flex;align-items:center;gap:.4rem;background:rgba(1,65,28,.4);border:1px solid var(--border);padding:.25rem .7rem;font-family:var(--font-mono);font-size:.62rem;color:var(--g5);letter-spacing:.1em;text-transform:uppercase;}
+.chip::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--g5);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.4rem;text-decoration:none;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:all .2s;cursor:pointer;border:none;font-family:var(--font-main);}
+.btn-gold{background:var(--gold);color:var(--g0);}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-2px);}
+.btn-ghost{background:transparent;color:var(--g5);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--g5);background:rgba(34,197,94,.06);}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.ani{animation:fadeIn .5s ease both;}
+.a1{animation-delay:.06s}.a2{animation-delay:.12s}.a3{animation-delay:.18s}.a4{animation-delay:.25s}.a5{animation-delay:.32s}
+/* SEC HEADER */
+.sec-header{padding:3.5rem 2rem 1.5rem;max-width:1200px;margin:0 auto;border-bottom:1px solid var(--border);display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;}
+.sec-id{font-family:var(--font-mono);font-size:.62rem;color:var(--muted);letter-spacing:.12em;margin-bottom:.4rem;}
+h2.st{font-size:clamp(1.8rem,3vw,2.8rem);font-weight:800;letter-spacing:-.02em;line-height:1.1;}
+h2.st .acc{color:var(--gold);}
+.sec-meta{font-family:var(--font-mono);font-size:.68rem;color:var(--muted);text-align:right;line-height:1.8;}
+/* ── HOME ── */
+#home-hero{min-height:calc(100vh - 56px);display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:3rem;padding:3rem 2rem;max-width:1200px;margin:0 auto;}
+.ey{font-family:var(--font-mono);font-size:.68rem;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem;}
+.ey::before{content:'//';color:var(--muted);}
+h1.ht{font-size:clamp(2.4rem,4vw,3.8rem);font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:1.3rem;}
+h1.ht .acc{color:var(--gold);}
+h1.ht .gr{color:var(--g5);}
+.hd{font-size:.92rem;color:var(--muted);line-height:1.8;margin-bottom:2.2rem;max-width:430px;}
+.ha{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem;}
+.hs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+.hsi{background:var(--g0);padding:.9rem;text-align:center;}
+.hsn{font-family:var(--font-mono);font-size:1.5rem;font-weight:600;color:var(--gold);display:block;}
+.hsl{font-size:.62rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.15rem;}
+/* TERMINAL */
+.term{background:var(--g1);border:1px solid var(--border);overflow:hidden;font-family:var(--font-mono);}
+.th{background:rgba(0,0,0,.3);border-bottom:1px solid var(--border);padding:.55rem 1rem;display:flex;align-items:center;gap:.4rem;}
+.td{width:10px;height:10px;border-radius:50%;}
+.tb-id{font-size:.62rem;color:var(--muted);margin-left:.6rem;}
+.tb2{padding:1.5rem;font-size:.75rem;line-height:2.1;color:var(--g5);}
+.tl{display:flex;align-items:flex-start;gap:.5rem;}
+.tp{color:var(--gold);flex-shrink:0;}
+.tc{color:var(--white);}
+.to{color:var(--muted);padding-left:1rem;}
+.tcur{display:inline-block;width:8px;height:13px;background:var(--g5);animation:blink 1s step-end infinite;vertical-align:middle;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+/* TICKER */
+.ticker{background:var(--g1);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:.65rem 0;overflow:hidden;}
+.ticker-inner{display:flex;gap:4rem;animation:tick 30s linear infinite;white-space:nowrap;width:max-content;font-family:var(--font-mono);font-size:.62rem;color:var(--muted);}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* FOOTER */
+.ft{background:var(--g0);border-top:1px solid var(--border);padding:1.1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.ftl{font-family:var(--font-mono);font-size:.62rem;color:var(--muted);}
+.ftlinks{display:flex;gap:1.5rem;}
+.ftlinks a{font-family:var(--font-mono);font-size:.6rem;color:var(--muted);text-decoration:none;transition:color .2s;}
+.ftlinks a:hover{color:var(--gold);}
+/* ── ABOUT ── */
+.ag{max-width:1200px;margin:0 auto;padding:0 2rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
+.ab{background:var(--g1);border:1px solid var(--border);padding:2rem;position:relative;overflow:hidden;}
+.ab::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--g5),transparent);}
+.abl{font-family:var(--font-mono);font-size:.6rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:.4rem;}
+.abl::before{content:'>_';color:var(--muted);}
+.ab h3{font-size:1.2rem;font-weight:700;margin-bottom:.8rem;}
+.ab p{font-size:.86rem;color:var(--muted);line-height:1.8;margin-bottom:.7rem;}
+.tg{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.8rem;}
+.tc2{background:var(--g0);border:1px solid var(--border);padding:.9rem;text-align:center;}
+.tav{width:44px;height:44px;background:var(--g2);border:1px solid var(--border);border-radius:50%;margin:0 auto .5rem;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+.tn{font-size:.8rem;font-weight:700;}
+.tr{font-family:var(--font-mono);font-size:.58rem;color:var(--muted);}
+.vl{list-style:none;}
+.vl li{display:flex;align-items:flex-start;gap:.8rem;padding:.75rem 0;border-bottom:1px solid var(--border);font-size:.86rem;}
+.vl li:last-child{border-bottom:none;}
+.vi{width:28px;height:28px;flex-shrink:0;background:rgba(1,65,28,.4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.72rem;}
+.vt strong{display:block;font-size:.83rem;margin-bottom:.15rem;}
+.vt span{font-size:.76rem;color:var(--muted);}
+/* ── EVENTS ── */
+.el{max-width:1200px;margin:0 auto;padding:0 2rem 4rem;display:grid;grid-template-columns:260px 1fr;gap:2rem;}
+.esb{position:sticky;top:76px;align-self:start;}
+.sb{background:var(--g1);border:1px solid var(--border);padding:1.1rem;margin-bottom:.8rem;}
+.sbt{font-family:var(--font-mono);font-size:.6rem;font-weight:600;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);}
+.fb{display:block;width:100%;background:transparent;border:1px solid var(--border);color:var(--muted);padding:.45rem .7rem;font-family:var(--font-mono);font-size:.65rem;text-align:left;cursor:pointer;margin-bottom:.35rem;letter-spacing:.07em;transition:all .2s;text-transform:uppercase;}
+.fb:hover,.fb.active{background:rgba(1,65,28,.4);border-color:var(--g4);color:var(--g5);}
+.evl{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);}
+.er{background:var(--g0);display:grid;grid-template-columns:76px 1fr auto;gap:1.2rem;padding:1.3rem;align-items:center;transition:background .2s;cursor:pointer;}
+.er:hover{background:var(--g1);}
+.er.feat{background:rgba(1,65,28,.18);border-left:2px solid var(--gold);}
+.edc{text-align:center;border:1px solid var(--border);padding:.5rem;}
+.eday{font-family:var(--font-mono);font-size:1.5rem;font-weight:600;color:var(--gold);display:block;line-height:1;}
+.emo{font-family:var(--font-mono);font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:.15rem;}
+.etag{font-family:var(--font-mono);font-size:.58rem;color:var(--g5);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.35rem;}
+.etag.gold{color:var(--gold);}
+.en{font-size:.95rem;font-weight:700;margin-bottom:.25rem;}
+.ew{font-size:.78rem;color:var(--muted);}
+/* ── SERVICES ── */
+.sg{max-width:1200px;margin:0 auto;padding:0 2rem 4rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);}
+.sc{background:var(--g0);padding:2.2rem 1.8rem;position:relative;overflow:hidden;transition:background .3s;}
+.sc:hover{background:var(--g1);}
+.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s;}
+.sc:hover::after{transform:scaleX(1);}
+.si{font-family:var(--font-mono);font-size:.58rem;color:var(--muted);margin-bottom:1rem;}
+.sib{width:48px;height:48px;background:var(--g2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.3rem;}
+.sc h3{font-size:1rem;font-weight:700;margin-bottom:.6rem;}
+.sc p{font-size:.8rem;color:var(--muted);line-height:1.75;}
+.stags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1rem;}
+.stag2{font-family:var(--font-mono);font-size:.56rem;background:var(--g1);border:1px solid var(--border);color:var(--g5);padding:.18rem .45rem;}
+/* ── CONTACT ── */
+.cl{max-width:1200px;margin:0 auto;padding:0 2rem 4rem;display:grid;grid-template-columns:1fr 1.4fr;gap:2.5rem;align-items:start;}
+.cpanel{background:var(--g1);border:1px solid var(--border);padding:1.8rem;margin-bottom:1rem;}
+.cpt{font-family:var(--font-mono);font-size:.6rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:1.3rem;padding-bottom:.7rem;border-bottom:1px solid var(--border);}
+.ci{display:flex;align-items:flex-start;gap:.9rem;padding:.9rem 0;border-bottom:1px solid var(--border);}
+.ci:last-child{border-bottom:none;}
+.cico{width:32px;height:32px;flex-shrink:0;background:var(--g2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.8rem;}
+.clb{font-family:var(--font-mono);font-size:.58rem;color:var(--muted);text-transform:uppercase;margin-bottom:.15rem;}
+.cv{font-size:.83rem;font-weight:600;}
+.fp{background:var(--g1);border:1px solid var(--border);padding:1.8rem;}
+.fh{font-family:var(--font-mono);font-size:.6rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:1.3rem;padding-bottom:.7rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.fg{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.9rem;}
+.fl{font-family:var(--font-mono);font-size:.58rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.fi,.fsel,.fta{background:var(--g0);border:1px solid var(--border);color:var(--white);padding:.6rem .85rem;font-family:var(--font-main);font-size:.83rem;outline:none;transition:border-color .2s;border-radius:0;-webkit-appearance:none;}
+.fi:focus,.fsel:focus,.fta:focus{border-color:var(--gold);}
+.fi::placeholder{color:var(--muted);}
+.fta{resize:vertical;min-height:95px;}
+.fsel option{background:var(--g0);}
+/* ── JOIN ── */
+.jh{max-width:1200px;margin:0 auto;padding:2.5rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center;}
+.jl h2{font-size:clamp(1.9rem,3.2vw,2.9rem);font-weight:800;letter-spacing:-.02em;margin-bottom:1rem;line-height:1.1;}
+.jl h2 .acc{color:var(--gold);}
+.jl p{font-size:.88rem;color:var(--muted);line-height:1.8;margin-bottom:1.3rem;}
+.mc{display:flex;flex-direction:column;gap:.8rem;}
+.mcard{background:var(--g1);border:1px solid var(--border);padding:1.3rem;display:flex;align-items:center;gap:1rem;transition:border-color .2s;}
+.mcard:hover{border-color:var(--gold);}
+.mico{font-size:1.4rem;flex-shrink:0;}
+.mt{font-size:.88rem;font-weight:700;margin-bottom:.2rem;}
+.md{font-size:.76rem;color:var(--muted);}
+.mtag{font-family:var(--font-mono);font-size:.56rem;color:var(--g5);background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);padding:.15rem .4rem;margin-left:auto;flex-shrink:0;}
+.jfb{background:var(--g1);border:1px solid var(--border);padding:1.8rem;}
+.jft{font-family:var(--font-mono);font-size:.6rem;color:var(--gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:1.3rem;padding-bottom:.7rem;border-bottom:1px solid var(--border);}
+.jft::before{content:'[ ';color:var(--muted);}
+.jft::after{content:' ]';color:var(--muted);}
+/* RESPONSIVE */
+@media(max-width:900px){
+  #home-hero{grid-template-columns:1fr;padding:2rem 1.5rem;}
+  .ag,.jh,.cl{grid-template-columns:1fr;}
+  .el{grid-template-columns:1fr;}
+  .sg{grid-template-columns:1fr;}
+  .tb-tabs a span:not(.tab-n){display:none;}
+  .sec-header,.ag,.jh,.cl,.el,.sg,.container{padding-left:1rem;padding-right:1rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- TOPBAR -->
+<nav id="topbar">
+  <a href="#" class="tb-logo" onclick="go('home');return false;">
+    <div class="tb-badge">PK</div>
+    <span class="tb-name">PSAF <span>·</span> France</span>
+  </a>
+  <ul class="tb-tabs">
+    <li><a href="#" id="t-home" class="active" onclick="go('home');return false;"><span class="tab-n">01</span><span>Accueil</span></a></li>
+    <li><a href="#" id="t-about" onclick="go('about');return false;"><span class="tab-n">02</span><span>À propos</span></a></li>
+    <li><a href="#" id="t-events" onclick="go('events');return false;"><span class="tab-n">03</span><span>Événements</span></a></li>
+    <li><a href="#" id="t-services" onclick="go('services');return false;"><span class="tab-n">04</span><span>Services</span></a></li>
+    <li><a href="#" id="t-contact" onclick="go('contact');return false;"><span class="tab-n">05</span><span>Contact</span></a></li>
+    <li><a href="#" id="t-join" class="tb-cta" onclick="go('join');return false;">Rejoindre →</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HOME ═══ -->
+<div class="page active" id="p-home">
+  <div id="home-hero">
+    <div>
+      <div class="chip ani">Association active · France</div>
+      <div class="ey ani a1" style="margin-top:1.1rem;">Pakistan Students Association</div>
+      <h1 class="ht ani a2">La communauté<br><span class="gr">étudiante</span><br><span class="acc">pakistanaise</span><br>en France</h1>
+      <p class="hd ani a3">Réseau d'entraide, événements culturels et accompagnement académique pour tous les étudiants pakistanais en France depuis 2012.</p>
+      <div class="ha ani a4">
+        <a href="#" class="btn btn-gold" onclick="go('join');return false;">Devenir membre →</a>
+        <a href="#" class="btn btn-ghost" onclick="go('events');return false;">Voir les événements</a>
+      </div>
+      <div class="hs ani a5">
+        <div class="hsi"><span class="hsn">500+</span><div class="hsl">Membres</div></div>
+        <div class="hsi"><span class="hsn">25</span><div class="hsl">Villes</div></div>
+        <div class="hsi"><span class="hsn">12 ans</span><div class="hsl">D'existence</div></div>
+      </div>
+    </div>
+    <div class="term ani a2">
+      <div class="th">
+        <div class="td" style="background:#ef4444"></div>
+        <div class="td" style="background:#f59e0b"></div>
+        <div class="td" style="background:#22c55e"></div>
+        <span class="tb-id">psaf@france:~$</span>
+      </div>
+      <div class="tb2">
+        <div class="tl"><span class="tp">$</span><span class="tc">psaf --status</span></div>
+        <div class="tl"><span class="to">✓ Association active depuis 2012</span></div>
+        <div class="tl"><span class="to">✓ 500+ membres dans toute la France</span></div>
+        <div class="tl">&nbsp;</div>
+        <div class="tl"><span class="tp">$</span><span class="tc">psaf next-event</span></div>
+        <div class="tl"><span class="to" style="color:var(--gold)">→ Gala de Printemps — 15 Avr 2025</span></div>
+        <div class="tl"><span class="to">&nbsp;&nbsp; Paris · 200 places disponibles</span></div>
+        <div class="tl">&nbsp;</div>
+        <div class="tl"><span class="tp">$</span><span class="tc">psaf join --free</span></div>
+        <div class="tl"><span class="to" style="color:var(--g5)">✓ Inscription gratuite · 0€ · Immédiate</span></div>
+        <div class="tl">&nbsp;</div>
+        <div class="tl"><span class="tp">$</span><span class="tcur"></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span><span style="color:var(--gold)">LIVE /</span> Gala de Printemps — Paris — 15 Avr</span>
+      <span><span style="color:var(--g5)">NEW /</span> Atelier CV & Entretiens — Lyon — 28 Mars</span>
+      <span><span style="color:var(--gold)">HOT /</span> Tournoi de Cricket PSAF — Paris — 10 Mai</span>
+      <span><span style="color:var(--g5)">INFO /</span> Webinaire Visa Étudiant — En ligne — 5 Avr</span>
+      <span><span style="color:var(--gold)">LIVE /</span> Gala de Printemps — Paris — 15 Avr</span>
+      <span><span style="color:var(--g5)">NEW /</span> Atelier CV & Entretiens — Lyon — 28 Mars</span>
+      <span><span style="color:var(--gold)">HOT /</span> Tournoi de Cricket PSAF — Paris — 10 Mai</span>
+      <span><span style="color:var(--g5)">INFO /</span> Webinaire Visa Étudiant — En ligne — 5 Avr</span>
+    </div>
+  </div>
+  <div class="ft"><div class="ftl">© 2025 PSAF · Association Loi 1901</div><div class="ftlinks"><a href="#">Facebook</a><a href="#">Instagram</a><a href="#">WhatsApp</a><a href="#">LinkedIn</a></div><div class="ftl">v2.0.0 · Paris, France</div></div>
+</div>
+
+<!-- ═══ ABOUT ═══ -->
+<div class="page" id="p-about">
+  <div class="sec-header container">
+    <div><div class="sec-id">PAGE_02 · À_PROPOS</div><h2 class="st">Notre <span class="acc">identité</span></h2></div>
+    <div class="sec-meta">Fondée en 2012<br>Paris, France</div>
+  </div>
+  <div class="ag">
+    <div class="ab ani">
+      <div class="abl">Mission</div>
+      <h3>Qui sommes-nous ?</h3>
+      <p>La Pakistan Students Association France (PSAF) est une association loi 1901 fondée par et pour les étudiants pakistanais résidant en France.</p>
+      <p>Notre mission : créer un espace d'entraide, préserver notre identité culturelle, et faciliter l'intégration dans la société française tout en restant fiers de nos racines.</p>
+      <p>Nous couvrons plus de 25 villes françaises et organisons plus de 40 événements par an.</p>
+    </div>
+    <div class="ab ani a1">
+      <div class="abl">Bureau 2024–2025</div>
+      <h3>L'équipe dirigeante</h3>
+      <div class="tg">
+        <div class="tc2"><div class="tav">👨‍💼</div><div class="tn">Ali Hassan</div><div class="tr">Président</div></div>
+        <div class="tc2"><div class="tav">👩‍💼</div><div class="tn">Sara Malik</div><div class="tr">Vice-Présidente</div></div>
+        <div class="tc2"><div class="tav">👨‍🎓</div><div class="tn">Usman Khan</div><div class="tr">Secrétaire</div></div>
+        <div class="tc2"><div class="tav">👩‍🎓</div><div class="tn">Fatima Raza</div><div class="tr">Trésorière</div></div>
+      </div>
+    </div>
+    <div class="ab ani a2">
+      <div class="abl">Valeurs</div>
+      <h3>Ce qui nous guide</h3>
+      <ul class="vl">
+        <li><div class="vi">🤝</div><div class="vt"><strong>Solidarité</strong><span>Entraide entre membres et nouveaux arrivants</span></div></li>
+        <li><div class="vi">🎌</div><div class="vt"><strong>Culture</strong><span>Préserver et promouvoir l'héritage pakistanais</span></div></li>
+        <li><div class="vi">📈</div><div class="vt"><strong>Excellence</strong><span>Soutenir la réussite académique et pro</span></div></li>
+        <li><div class="vi">🌍</div><div class="vt"><strong>Ouverture</strong><span>Dialogue avec toutes les communautés</span></div></li>
+      </ul>
+    </div>
+    <div class="ab ani a3">
+      <div class="abl">Chronologie</div>
+      <h3>Notre parcours</h3>
+      <div style="font-family:var(--font-mono);font-size:.73rem;line-height:2.3;color:var(--muted);">
+        <div><span style="color:var(--gold)">2012 ——</span> Fondation à Paris par 12 étudiants</div>
+        <div><span style="color:var(--gold)">2015 ——</span> Expansion à Lyon et Marseille</div>
+        <div><span style="color:var(--gold)">2017 ——</span> 100 membres · premier gala annuel</div>
+        <div><span style="color:var(--gold)">2019 ——</span> Partenariat Campus France Pakistan</div>
+        <div><span style="color:var(--gold)">2021 ——</span> Passage au digital · webinaires</div>
+        <div><span style="color:var(--gold)">2023 ——</span> 400 membres · 20 villes couvertes</div>
+        <div><span style="color:var(--gold)">2025 ——</span> <span style="color:var(--g5)">500+ membres · 25 villes ✓</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="ft"><div class="ftl">© 2025 PSAF · Association Loi 1901</div><div class="ftlinks"><a href="#">Facebook</a><a href="#">Instagram</a><a href="#">WhatsApp</a></div><div class="ftl">v2.0.0</div></div>
+</div>
+
+<!-- ═══ EVENTS ═══ -->
+<div class="page" id="p-events">
+  <div class="sec-header container">
+    <div><div class="sec-id">PAGE_03 · ÉVÉNEMENTS</div><h2 class="st">Agenda <span class="acc">2025</span></h2></div>
+    <div class="sec-meta">40+ événements/an<br>France entière</div>
+  </div>
+  <div class="el">
+    <div class="esb">
+      <div class="sb"><div class="sbt">Catégorie</div>
+        <button class="fb active">Tous</button>
+        <button class="fb">Culture</button>
+        <button class="fb">Professionnel</button>
+        <button class="fb">Sport</button>
+        <button class="fb">Religieux</button>
+        <button class="fb">Formation</button>
+      </div>
+      <div class="sb"><div class="sbt">Ville</div>
+        <button class="fb active">Toutes</button>
+        <button class="fb">Paris</button>
+        <button class="fb">Lyon</button>
+        <button class="fb">Toulouse</button>
+        <button class="fb">Bordeaux</button>
+        <button class="fb">En ligne</button>
+      </div>
+    </div>
+    <div class="evl">
+      <div class="er ani">
+        <div class="edc"><span class="eday">28</span><div class="emo">Mars</div></div>
+        <div><div class="etag">// Professionnel</div><div class="en">Atelier CV & Entretiens</div><div class="ew">📍 École Centrale Lyon · Gratuit · 9h–13h</div></div>
+        <div><a href="#" class="btn btn-ghost">S'inscrire</a></div>
+      </div>
+      <div class="er ani a1">
+        <div class="edc"><span class="eday">05</span><div class="emo">Avr</div></div>
+        <div><div class="etag">// Formation</div><div class="en">Webinaire Visa Étudiant & Titre de Séjour</div><div class="ew">💻 En ligne (Zoom) · Inscription requise</div></div>
+        <div><a href="#" class="btn btn-ghost">S'inscrire</a></div>
+      </div>
+      <div class="er feat ani a2">
+        <div class="edc"><span class="eday">15</span><div class="emo">Avr</div></div>
+        <div><div class="etag gold">// ★ Événement phare · Culture</div><div class="en">Soirée Culturelle & Gala de Printemps</div><div class="ew">📍 Salle des Fêtes, Saint-Denis · 200 places · 19h–23h</div></div>
+        <div><a href="#" class="btn btn-gold">Réserver</a></div>
+      </div>
+      <div class="er ani a3">
+        <div class="edc"><span class="eday">20</span><div class="emo">Avr</div></div>
+        <div><div class="etag">// Religieux</div><div class="en">Iftar Communautaire — Ramadan</div><div class="ew">📍 Toulouse · 80 convives · Ouvert à tous</div></div>
+        <div><a href="#" class="btn btn-ghost">S'inscrire</a></div>
+      </div>
+      <div class="er ani a4">
+        <div class="edc"><span class="eday">10</span><div class="emo">Mai</div></div>
+        <div><div class="etag">// Sport</div><div class="en">Tournoi de Cricket PSAF 2025</div><div class="ew">📍 Stade Charléty, Paris · Équipes de 11</div></div>
+        <div><a href="#" class="btn btn-ghost">Participer</a></div>
+      </div>
+      <div class="er ani a5">
+        <div class="edc"><span class="eday">01</span><div class="emo">Juin</div></div>
+        <div><div class="etag">// Formation</div><div class="en">Journée Orientation Nouveaux Arrivants</div><div class="ew">📍 Université de Bordeaux · Gratuit</div></div>
+        <div><a href="#" class="btn btn-ghost">S'inscrire</a></div>
+      </div>
+      <div class="er ani">
+        <div class="edc"><span class="eday">14</span><div class="emo">Août</div></div>
+        <div><div class="etag">// Culture</div><div class="en">Célébration Indépendance du Pakistan</div><div class="ew">📍 Paris · Journée festive · Entrée libre</div></div>
+        <div><a href="#" class="btn btn-ghost">Détails</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="ft"><div class="ftl">© 2025 PSAF · Association Loi 1901</div><div class="ftlinks"><a href="#">Facebook</a><a href="#">Instagram</a><a href="#">WhatsApp</a></div><div class="ftl">v2.0.0</div></div>
+</div>
+
+<!-- ═══ SERVICES ═══ -->
+<div class="page" id="p-services">
+  <div class="sec-header container">
+    <div><div class="sec-id">PAGE_04 · SERVICES</div><h2 class="st">Ce que nous <span class="acc">offrons</span></h2></div>
+    <div class="sec-meta">6 domaines<br>d'accompagnement</div>
+  </div>
+  <div class="sg">
+    <div class="sc ani"><div class="si">SERVICE_01</div><div class="sib">🎓</div><h3>Accompagnement Académique</h3><p>Tutorat entre pairs, aide à la recherche de logement, orientation universitaire et soutien en rédaction académique.</p><div class="stags"><span class="stag2">Tutorat</span><span class="stag2">Logement</span><span class="stag2">Université</span></div></div>
+    <div class="sc ani a1"><div class="si">SERVICE_02</div><div class="sib">💼</div><h3>Réseau Professionnel</h3><p>Alumni établis en France, forum emploi annuel, mentorat pour stages et premiers emplois dans des entreprises françaises.</p><div class="stags"><span class="stag2">Alumni</span><span class="stag2">Stages</span><span class="stag2">Mentorat</span></div></div>
+    <div class="sc ani a2"><div class="si">SERVICE_03</div><div class="sib">📋</div><h3>Aide Administrative</h3><p>Renouvellement de titre de séjour, compte bancaire, CAF, assurance maladie et démarches en préfecture.</p><div class="stags"><span class="stag2">Visa</span><span class="stag2">CAF</span><span class="stag2">Préfecture</span></div></div>
+    <div class="sc ani a3"><div class="si">SERVICE_04</div><div class="sib">🎌</div><h3>Événements Culturels</h3><p>Célébrations de l'Aïd, fête de l'Indépendance, soirées gastronomiques, expositions artisanales et projections de films.</p><div class="stags"><span class="stag2">Culture</span><span class="stag2">Gastronomie</span><span class="stag2">Art</span></div></div>
+    <div class="sc ani a4"><div class="si">SERVICE_05</div><div class="sib">🗣️</div><h3>Cours de Langues</h3><p>Français intensif pour nouveaux arrivants, ourdou et pendjabi pour les enfants de la communauté, échanges linguistiques.</p><div class="stags"><span class="stag2">Français</span><span class="stag2">Ourdou</span><span class="stag2">Enfants</span></div></div>
+    <div class="sc ani a5"><div class="si">SERVICE_06</div><div class="sib">⚽</div><h3>Sports & Bien-être</h3><p>Équipes de cricket, football et badminton, tournois régionaux inter-villes et activités de bien-être communautaire.</p><div class="stags"><span class="stag2">Cricket</span><span class="stag2">Football</span><span class="stag2">Tournois</span></div></div>
+  </div>
+  <div class="ft"><div class="ftl">© 2025 PSAF · Association Loi 1901</div><div class="ftlinks"><a href="#">Facebook</a><a href="#">Instagram</a><a href="#">WhatsApp</a></div><div class="ftl">v2.0.0</div></div>
+</div>
+
+<!-- ═══ CONTACT ═══ -->
+<div class="page" id="p-contact">
+  <div class="sec-header container">
+    <div><div class="sec-id">PAGE_05 · CONTACT</div><h2 class="st">Nous <span class="acc">contacter</span></h2></div>
+    <div class="sec-meta">Réponse sous 48h<br>contact@psaf.fr</div>
+  </div>
+  <div class="cl">
+    <div>
+      <div class="cpanel ani">
+        <div class="cpt">Coordonnées</div>
+        <div class="ci"><div class="cico">📧</div><div><div class="clb">Email</div><div class="cv">contact@psaf.fr</div></div></div>
+        <div class="ci"><div class="cico">📍</div><div><div class="clb">Siège</div><div class="cv">Paris, France</div></div></div>
+        <div class="ci"><div class="cico">📱</div><div><div class="clb">WhatsApp</div><div class="cv">Groupe communautaire</div></div></div>
+        <div class="ci"><div class="cico">🕐</div><div><div class="clb">Permanence</div><div class="cv">1er samedi du mois · 14h–17h</div></div></div>
+      </div>
+      <div class="cpanel ani a1">
+        <div class="cpt">Réseaux sociaux</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.3rem;">
+          <a href="#" style="display:flex;align-items:center;gap:.6rem;background:var(--g0);border:1px solid var(--border);padding:.65rem;text-decoration:none;color:var(--white);font-size:.78rem;transition:border-color .2s;font-family:var(--font-mono);" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(1,102,48,0.35)'">f · Facebook</a>
+          <a href="#" style="display:flex;align-items:center;gap:.6rem;background:var(--g0);border:1px solid var(--border);padding:.65rem;text-decoration:none;color:var(--white);font-size:.78rem;transition:border-color .2s;font-family:var(--font-mono);" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(1,102,48,0.35)'">ig · Instagram</a>
+          <a href="#" style="display:flex;align-items:center;gap:.6rem;background:var(--g0);border:1px solid var(--border);padding:.65rem;text-decoration:none;color:var(--white);font-size:.78rem;transition:border-color .2s;font-family:var(--font-mono);" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(1,102,48,0.35)'">wa · WhatsApp</a>
+          <a href="#" style="display:flex;align-items:center;gap:.6rem;background:var(--g0);border:1px solid var(--border);padding:.65rem;text-decoration:none;color:var(--white);font-size:.78rem;transition:border-color .2s;font-family:var(--font-mono);" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='rgba(1,102,48,0.35)'">in · LinkedIn</a>
+        </div>
+      </div>
+    </div>
+    <div class="fp ani a2">
+      <div class="fh"><span>Formulaire de contact</span><span style="color:var(--muted);font-size:.58rem;">Réponse &lt; 48h</span></div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">Prénom</label><input type="text" class="fi" placeholder="Ahmed"></div>
+        <div class="fg"><label class="fl">Nom</label><input type="text" class="fi" placeholder="Khan"></div>
+      </div>
+      <div class="fg"><label class="fl">Email</label><input type="email" class="fi" placeholder="ahmed@universite.fr"></div>
+      <div class="fg"><label class="fl">Objet</label>
+        <select class="fsel">
+          <option>Adhésion à l'association</option>
+          <option>Information événement</option>
+          <option>Aide administrative</option>
+          <option>Partenariat</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Message</label><textarea class="fta" placeholder="Décrivez votre demande..."></textarea></div>
+      <button class="btn btn-gold" style="width:100%;justify-content:center;" onclick="alert('Message envoyé ! شکریہ — Réponse sous 48h.')">Envoyer →</button>
+    </div>
+  </div>
+  <div class="ft"><div class="ftl">© 2025 PSAF · Association Loi 1901</div><div class="ftlinks"><a href="#">Facebook</a><a href="#">Instagram</a><a href="#">WhatsApp</a></div><div class="ftl">v2.0.0</div></div>
+</div>
+
+<!-- ═══ JOIN ═══ -->
+<div class="page" id="p-join">
+  <div class="sec-header container">
+    <div><div class="sec-id">PAGE_06 · REJOINDRE</div><h2 class="st">Devenez <span class="acc">membre</span></h2></div>
+    <div class="sec-meta">Gratuit<br>Inscription immédiate</div>
+  </div>
+  <div class="jh">
+    <div class="jl ani">
+      <h2>Rejoignez <span class="acc">500+</span> étudiants pakistanais en France</h2>
+      <p>L'adhésion est entièrement gratuite et ouverte à tous les étudiants d'origine pakistanaise — ou amis du Pakistan — résidant en France.</p>
+      <div class="mc">
+        <div class="mcard"><div class="mico">🎓</div><div><div class="mt">Membre Étudiant</div><div class="md">Accès à tous les services et événements PSAF</div></div><span class="mtag">GRATUIT</span></div>
+        <div class="mcard"><div class="mico">🏢</div><div><div class="mt">Membre Alumni</div><div class="md">Pour les anciens étudiants et professionnels</div></div><span class="mtag">GRATUIT</span></div>
+        <div class="mcard"><div class="mico">🤝</div><div><div class="mt">Partenaire / Sympathisant</div><div class="md">Soutenir l'association sans être étudiant</div></div><span class="mtag">CONTACT</span></div>
+      </div>
+    </div>
+    <div class="jfb ani a2">
+      <div class="jft">INSCRIPTION</div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">Prénom *</label><input type="text" class="fi" placeholder="Ahmed"></div>
+        <div class="fg"><label class="fl">Nom *</label><input type="text" class="fi" placeholder="Khan"></div>
+      </div>
+      <div class="fg"><label class="fl">Email *</label><input type="email" class="fi" id="join-email" placeholder="ahmed@universite.fr"></div>
+      <div class="fr2">
+        <div class="fg"><label class="fl">Ville</label>
+          <select class="fsel"><option>Paris</option><option>Lyon</option><option>Toulouse</option><option>Bordeaux</option><option>Marseille</option><option>Autre</option></select>
+        </div>
+        <div class="fg"><label class="fl">Université</label><input type="text" class="fi" placeholder="Sorbonne..."></div>
+      </div>
+      <div class="fg"><label class="fl">Type de membre</label>
+        <select class="fsel"><option>Étudiant</option><option>Alumni</option><option>Sympathisant</option></select>
+      </div>
+      <div style="background:rgba(1,65,28,.2);border:1px solid var(--border);padding:.75rem;font-family:var(--font-mono);font-size:.6rem;color:var(--muted);margin-bottom:.9rem;">
+        <span style="color:var(--g5)">ℹ</span> Adhésion 100% gratuite · Données protégées RGPD · Désabonnement à tout moment
+      </div>
+      <button class="btn btn-gold" id="join-btn" style="width:100%;justify-content:center;" onclick="doJoin()">Créer mon compte membre →</button>
+    </div>
+  </div>
+  <div class="ft"><div class="ftl">© 2025 PSAF · Association Loi 1901</div><div class="ftlinks"><a href="#">Facebook</a><a href="#">Instagram</a><a href="#">WhatsApp</a></div><div class="ftl">v2.0.0</div></div>
+</div>
+
+<script>
+// CURSOR
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function anim(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();
+document.querySelectorAll('a,button,.er,.sc,.mcard').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.width='50px';ring.style.height='50px';ring.style.borderColor='rgba(212,168,67,.8)';});
+  el.addEventListener('mouseleave',()=>{ring.style.width='36px';ring.style.height='36px';ring.style.borderColor='rgba(212,168,67,.5)';});
+});
+
+// NAVIGATION
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tb-tabs a').forEach(a=>a.classList.remove('active'));
+  document.getElementById('p-'+id).classList.add('active');
+  const t=document.getElementById('t-'+id);
+  if(t)t.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  // re-trigger animations
+  document.querySelectorAll('#p-'+id+' .ani').forEach(el=>{el.style.animation='none';el.offsetHeight;el.style.animation='';});
+}
+
+// FILTERS
+document.querySelectorAll('.fb').forEach(b=>{
+  b.addEventListener('click',function(){
+    this.closest('.sb').querySelectorAll('.fb').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// JOIN
+function doJoin(){
+  const e=document.getElementById('join-email');
+  if(!e.value.includes('@')){e.style.borderColor='#ef4444';return;}
+  const btn=document.getElementById('join-btn');
+  btn.textContent='✓ Bienvenue dans la PSAF! شکریہ';
+  btn.style.background='var(--g4)';
+  btn.disabled=true;
+}
+</script>
+</body>
+</html>
